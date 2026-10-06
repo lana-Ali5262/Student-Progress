@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Student Progress</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .app {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .header h1 span {
+            background: #2563eb;
+            color: white;
+            font-size: 1.2rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+        }
+
+        .badge {
+            background: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+            color: #2563eb;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.4rem 1.2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.02);
+            border: 1px solid #eef2f6;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: #cbd5e1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .stat-sub {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 0.4rem;
+        }
+
+        /* Section headers */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section-title h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .section-title button {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 0.45rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .section-title button:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+
+        /* Course list */
+        .course-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            border: 1px solid #eef2f6;
+            transition: 0.1s;
+        }
+
+        .course-card:hover {
+            border-color: #cbd5e1;
+        }
+
+        .course-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .course-info {
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .course-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .course-code {
+            font-size: 0.75rem;
+            background: #eef2ff;
+            color: #2563eb;
+            padding: 0.15rem 0.6rem;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        .course-grade-summary {
+            text-align: right;
+        }
+
+        .course-grade-big {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1;
+        }
+
+        .course-grade-big small {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #64748b;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .course-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: 12px;
+            transition: 0.1s;
+            color: #64748b;
+        }
+
+        .course-actions button:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .course-actions button.add-item-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.4rem 0.9rem;
+            border-radius: 30px;
+        }
+
+        .course-actions button.add-item-btn:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* Progress bar for course (weighted/grade) */
+        .course-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .course-progress-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            min-width: 90px;
+        }
+
+        .progress-bar-bg {
+            background: #e9eef4;
+            border-radius: 100px;
+            height: 8px;
+            flex: 1;
+        }
+
+        .progress-fill {
+            height: 8px;
+            border-radius: 100px;
+            background: #2563eb;
+            width: 0%;
+            transition: width 0.2s;
+        }
+
+        .progress-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #0f172a;
+            min-width: 55px;
+            text-align: right;
+        }
+
+        /* Items (quizzes/assignments) table */
+        .items-container {
+            margin-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1rem;
+        }
+
+        .items-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 0.6rem;
+            padding: 0 0.5rem 0.5rem 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 0.6rem;
+            padding: 0.6rem 0.5rem;
+            align-items: center;
+            border-radius: 12px;
+            transition: 0.1s;
+        }
+
+        .item-row:hover {
+            background: #f8fafc;
+        }
+
+        .item-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .item-type-badge {
+            font-size: 0.65rem;
+            padding: 0.1rem 0.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .item-type-badge.quiz {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .item-type-badge.assignment {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .item-score {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0f172a;
+            text-align: right;
+        }
+
+        .item-weight {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: right;
+        }
+
+        .item-percent {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .item-percent.high {
+            color: #15803d;
+        }
+
+        .item-percent.mid {
+            color: #b45309;
+        }
+
+        .item-percent.low {
+            color: #b91c1c;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .item-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            transition: 0.1s;
+            color: #94a3b8;
+        }
+
+        .item-actions button:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .empty-items {
+            padding: 1rem 0.5rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .empty-message {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: #64748b;
+            border: 1px dashed #cbd5e1;
+            font-size: 1rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.15s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.96);
+            transition: 0.15s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 16px;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+            transition: 0.15s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: 2px solid #2563eb;
+            outline-offset: 1px;
+            border-color: transparent;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 0.3rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.8rem;
+            margin-top: 1.8rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.1s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        .footer button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .footer button:hover {
+            color: #475569;
+        }
+
+        @media (max-width: 700px) {
+            .items-header {
+                display: none;
+            }
+
+            .item-row {
+                grid-template-columns: 1fr auto;
+                grid-template-areas:
+                    "name actions"
+                    "meta meta";
+                gap: 0.3rem;
+                padding: 0.8rem 0.5rem;
+                background: #f8fafc;
+            }
+
+            .item-name {
+                grid-area: name;
+            }
+
+            .item-actions {
+                grid-area: actions;
+            }
+
+            .item-score,
+            .item-weight,
+            .item-percent {
+                display: inline;
+                font-size: 0.8rem;
+                text-align: left;
+            }
+
+            .item-row>.item-score::before {
+                content: "Score: ";
+                color: #64748b;
+                font-weight: 400;
+            }
+
+            .item-row>.item-weight::before {
+                content: " · Weight: ";
+                color: #64748b;
+                font-weight: 400;
+            }
+
+            .item-row>.item-percent::before {
+                content: " · ";
+            }
+
+            .item-row>.item-score,
+            .item-row>.item-weight,
+            .item-row>.item-percent {
+                grid-area: meta;
+                display: inline-block;
+            }
+
+            .item-row {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .item-score,
+            .item-weight,
+            .item-percent {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                📚 My Progress
+                <span id="currentDate"></span>
+            </h1>
+            <div class="badge" id="overallGradeBadge">—</div>
+        </div>
+
+        <!-- Stats overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Courses</div>
+                <div class="stat-value" id="courseCount">0</div>
+                <div class="stat-sub">active</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg. progress</div>
+                <div class="stat-value" id="avgProgress">0%</div>
+                <div class="stat-sub">across all</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg. grade</div>
+                <div class="stat-value" id="avgGrade">—</div>
+                <div class="stat-sub">weighted</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Items tracked</div>
+                <div class="stat-value" id="itemCount">0</div>
+                <div class="stat-sub">quizzes + assignments</div>
+            </div>
+        </div>
+
+        <!-- Courses section -->
+        <div class="section-title">
+            <h2>📖 My Courses</h2>
+            <button id="addCourseBtn">+ Add course</button>
+        </div>
+
+        <div class="course-list" id="courseList">
+            <!-- dynamic courses inserted here -->
+        </div>
+
+        <div class="footer">
+            Your data is saved locally in your browser.
+            <button id="resetDataBtn">Reset all data</button>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing a COURSE -->
+    <div class="modal-overlay" id="courseModalOverlay">
+        <div class="modal">
+            <h3 id="courseModalTitle">Add course</h3>
+            <form id="courseForm">
+                <input type="hidden" id="courseEditIndex" value="-1">
+                <div class="form-group">
+                    <label for="courseName">Course name *</label>
+                    <input type="text" id="courseName" placeholder="e.g. Calculus I" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseCode">Course code</label>
+                    <input type="text" id="courseCode" placeholder="e.g. MATH101">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelCourseModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing an ITEM (quiz/assignment) -->
+    <div class="modal-overlay" id="itemModalOverlay">
+        <div class="modal">
+            <h3 id="itemModalTitle">Add item</h3>
+            <form id="itemForm">
+                <input type="hidden" id="itemEditIndex" value="-1">
+                <input type="hidden" id="itemCourseIndex" value="-1">
+
+                <div class="form-group">
+                    <label for="itemName">Item name *</label>
+                    <input type="text" id="itemName" placeholder="e.g. Quiz 1, Essay 2" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemType">Type</label>
+                        <select id="itemType">
+                            <option value="quiz">Quiz</option>
+                            <option value="assignment">Assignment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemWeight">Weight (%)</label>
+                        <input type="number" id="itemWeight" min="0" max="100" step="1" value="10">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemScore">Score earned</label>
+                        <input type="number" id="itemScore" min="0" step="0.1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemMaxScore">Out of (max)</label>
+                        <input type="number" id="itemMaxScore" min="0.1" step="0.1" value="100">
+                    </div>
+                </div>
+                <div class="form-hint">Grade = (Score / Max) × 100. Weight is the % this item contributes to the course
+                    grade.</div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelItemModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const STORAGE_KEY = 'student_progress_courses_v2';
+
+            // ---------- default data ----------
+            const defaultCourses = [
+                {
+                    name: 'Calculus I',
+                    code: 'MATH101',
+                    items: [
+                        { name: 'Quiz 1', type: 'quiz', weight: 10, score: 18, maxScore: 20 },
+                        { name: 'Quiz 2', type: 'quiz', weight: 10, score: 15, maxScore: 20 },
+                        { name: 'Midterm', type: 'assignment', weight: 30, score: 85, maxScore: 100 },
+                        { name: 'Homework 1', type: 'assignment', weight: 10, score: 45, maxScore: 50 }
+                    ]
+                },
+                {
+                    name: 'Physics',
+                    code: 'PHYS201',
+                    items: [
+                        { name: 'Lab 1', type: 'assignment', weight: 15, score: 88, maxScore: 100 },
+                        { name: 'Quiz 1', type: 'quiz', weight: 10, score: 7, maxScore: 10 }
+                    ]
+                }
+            ];
+
+            let courses = [];
+
+            // DOM elements
+            const courseListEl = document.getElementById('courseList');
+            const courseCountEl = document.getElementById('courseCount');
+            const avgProgressEl = document.getElementById('avgProgress');
+            const avgGradeEl = document.getElementById('avgGrade');
+            const itemCountEl = document.getElementById('itemCount');
+            const overallGradeBadge = document.getElementById('overallGradeBadge');
+            const currentDateEl = document.getElementById('currentDate');
+
+            // Course modal
+            const courseModalOverlay = document.getElementById('courseModalOverlay');
+            const courseModalTitle = document.getElementById('courseModalTitle');
+            const courseForm = document.getElementById('courseForm');
+            const courseEditIndex = document.getElementById('courseEditIndex');
+            const courseNameInput = document.getElementById('courseName');
+            const courseCodeInput = document.getElementById('courseCode');
+            const cancelCourseModalBtn = document.getElementById('cancelCourseModalBtn');
+
+            // Item modal
+            const itemModalOverlay = document.getElementById('itemModalOverlay');
+            const itemModalTitle = document.getElementById('itemModalTitle');
+            const itemForm = document.getElementById('itemForm');
+            const itemEditIndex = document.getElementById('itemEditIndex');
+            const itemCourseIndex = document.getElementById('itemCourseIndex');
+            const itemNameInput = document.getElementById('itemName');
+            const itemTypeInput = document.getElementById('itemType');
+            const itemWeightInput = document.getElementById('itemWeight');
+            const itemScoreInput = document.getElementById('itemScore');
+            const itemMaxScoreInput = document.getElementById('itemMaxScore');
+            const cancelItemModalBtn = document.getElementById('cancelItemModalBtn');
+
+            const addCourseBtn = document.getElementById('addCourseBtn');
+            const resetDataBtn = document.getElementById('resetDataBtn');
+
+            // ---------- helpers ----------
+            function formatDate() {
+                const d = new Date();
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+            currentDateEl.textContent = formatDate();
+
+            function escapeHtml(text) {
+                if (text === undefined || text === null) return '';
+                const div = document.createElement('div');
+                div.textContent = String(text);
+                return div.innerHTML;
+            }
+
+            function uid() {
+                return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+            }
+
+            // Load/save
+            function loadCourses() {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        if (Array.isArray(parsed)) {
+                            courses = parsed.map(c => ({
+                                id: c.id || uid(),
+                                name: c.name || 'Untitled',
+                                code: c.code || '',
+                                items: Array.isArray(c.items) ? c.items : []
+                            }));
+                        } else {
+                            courses = [];
+                        }
+                    } catch (e) {
+                        courses = [];
+                    }
+                } else {
+                    // seed with defaults
+                    courses = defaultCourses.map(c => ({
+                        id: uid(),
+                        name: c.name,
+                        code: c.code,
+                        items: c.items.map(i => ({ ...i, id: i.id || uid() }))
+                    }));
+                    saveCourses();
+                }
+            }
+
+            function saveCourses() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(courses));
+            }
+
+            // ---------- grade calculations ----------
+            // Calculate course grade from items, weighted by item.weight.
+            // Each item's "grade" = (score / maxScore) * 100
+            // Course grade = sum(item_grade * item_weight) / sum(item_weight)
+            function calculateCourseGrade(course) {
+                const items = course.items || [];
+                let weightedSum = 0;
+                let totalWeight = 0;
+
+                items.forEach(item => {
+                    const weight = Number(item.weight) || 0;
+                    if (weight <= 0) return;
+
+                    const score = Number(item.score) || 0;
+                    const maxScore = Number(item.maxScore) || 1;
+                    const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
+                    const pct = Math.min(100, Math.max(0, percentage));
+
+                    weightedSum += pct * weight;
+                    totalWeight += weight;
+                });
+
+                if (totalWeight === 0) return null;
+                return weightedSum / totalWeight;
+            }
+
+            // Progress = percentage of total weight that has been graded so far.
+            // For a simple view, if all items have scores entered, progress = 100%.
+            // Actually "progress" here = total weight of graded items / 100 (assuming weights sum to 100)
+            // But weights might not sum to 100, so we show progress = (sum of item weights) capped at 100
+            function calculateProgress(course) {
+                const items = course.items || [];
+                if (items.length === 0) return 0;
+                let totalWeight = 0;
+                items.forEach(item => {
+                    totalWeight += Number(item.weight) || 0;
+                });
+                return Math.min(100, Math.round(totalWeight));
+            }
+
+            // For stats: average progress
+            function getAverageProgress() {
+                if (courses.length === 0) return 0;
+                let total = 0;
+                courses.forEach(c => {
+                    total += calculateProgress(c);
+                });
+                return Math.round(total / courses.length);
+            }
+
+            // For stats: average grade (unweighted mean of course grades)
+            function getAverageGrade() {
+                const grades = courses
+                    .map(c => calculateCourseGrade(c))
+                    .filter(g => g !== null);
+                if (grades.length === 0) return null;
+                const sum = grades.reduce((a, b) => a + b, 0);
+                return sum / grades.length;
+            }
+
+            function getTotalItems() {
+                return courses.reduce((sum, c) => sum + (c.items ? c.items.length : 0), 0);
+            }
+
+            // ---------- render ----------
+            function renderCourses() {
+                if (courses.length === 0) {
+                    courseListEl.innerHTML = `<div class="empty-message">✨ No courses yet. Click "Add course" to start tracking your progress.</div>`;
+                    updateStats();
+                    return;
+                }
+
+                let html = '';
+                courses.forEach((course, cIdx) => {
+                    const grade = calculateCourseGrade(course);
+                    const gradeDisplay = grade !== null ? grade.toFixed(1) + '%' : '—';
+                    const progress = calculateProgress(course);
+
+                    // Build items rows
+                    const items = course.items || [];
+                    let itemsHtml = '';
+
+                    if (items.length === 0) {
+                        itemsHtml = `<div class="empty-items">No quizzes or assignments added yet.</div>`;
+                    } else {
+                        itemsHtml = items.map((item, iIdx) => {
+                            const score = Number(item.score) || 0;
+                            const maxScore = Number(item.maxScore) || 1;
+                            const percent = maxScore > 0 ? (score / maxScore) * 100 : 0;
+                            const pctDisplay = Math.min(100, Math.max(0, percent)).toFixed(1) + '%';
+                            let pctClass = 'mid';
+                            if (percent >= 85) pctClass = 'high';
+                            else if (percent < 70) pctClass = 'low';
+
+                            const typeClass = item.type === 'quiz' ? 'quiz' : 'assignment';
+                            const typeLabel = item.type === 'quiz' ? 'Quiz' : 'Assignment';
+
+                            return `
+                <div class="item-row">
+                  <div class="item-name">
+                    ${escapeHtml(item.name)}
+                    <span class="item-type-badge ${typeClass}">${typeLabel}</span>
+                  </div>
+                  <div class="item-score">${score} / ${maxScore}</div>
+                  <div class="item-weight">${Number(item.weight) || 0}%</div>
+                  <div class="item-percent ${pctClass}">${pctDisplay}</div>
+                  <div class="item-actions">
+                    <button class="edit-item-btn" data-course="${cIdx}" data-item="${iIdx}" title="Edit">✏️</button>
+                    <button class="delete-item-btn" data-course="${cIdx}" data-item="${iIdx}" title="Delete">🗑️</button>
+                  </div>
+                </div>
+              `;
+                        }).join('');
+                    }
+
+                    html += `
+            <div class="course-card" data-course-index="${cIdx}">
+              <div class="course-header">
+                <div class="course-info">
+                  <div class="course-name">
+                    ${escapeHtml(course.name)}
+                    ${course.code ? `<span class="course-code">${escapeHtml(course.code)}</span>` : ''}
+                  </div>
+                </div>
+                <div class="course-grade-summary">
+                  <div class="course-grade-big">${gradeDisplay}<small>course grade</small></div>
+                </div>
+                <div class="course-actions">
+                  <button class="add-item-btn" data-course="${cIdx}">+ Add item</button>
+                  <button class="edit-course-btn" data-course="${cIdx}" title="Edit course">✏️</button>
+                  <button class="delete-course-btn" data-course="${cIdx}" title="Delete course">🗑️</button>
+                </div>
+              </div>
+
+              <div class="course-progress-row">
+                <div class="course-progress-label">Weights entered</div>
+                <div class="progress-bar-bg">
+                  <div class="progress-fill" style="width: ${progress}%;"></div>
+                </div>
+                <div class="progress-value">${progress}%</div>
+              </div>
+
+              <div class="items-container">
+                <div class="items-header">
+                  <div>Item</div>
+                  <div style="text-align:right;">Score</div>
+                  <div style="text-align:right;">Weight</div>
+                  <div style="text-align:right;">Percent</div>
+                  <div></div>
+                </div>
+                ${itemsHtml}
+              </div>
+            </div>
+          `;
+                });
+
+                courseListEl.innerHTML = html;
+
+                // Attach listeners
+                document.querySelectorAll('.add-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cIdx = Number(btn.dataset.course);
+                        openAddItemModal(cIdx);
+                    });
+                });
+
+                document.querySelectorAll('.edit-course-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cIdx = Number(btn.dataset.course);
+                        openEditCourseModal(cIdx);
+                    });
+                });
+
+                document.querySelectorAll('.delete-course-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cIdx = Number(btn.dataset.course);
+                        deleteCourse(cIdx);
+                    });
+                });
+
+                document.querySelectorAll('.edit-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cIdx = Number(btn.dataset.course);
+                        const iIdx = Number(btn.dataset.item);
+                        openEditItemModal(cIdx, iIdx);
+                    });
+                });
+
+                document.querySelectorAll('.delete-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cIdx = Number(btn.dataset.course);
+                        const iIdx = Number(btn.dataset.item);
+                        deleteItem(cIdx, iIdx);
+                    });
+                });
+
+                updateStats();
+            }
+
+            function updateStats() {
+                courseCountEl.textContent = courses.length;
+
+                const avgProg = getAverageProgress();
+                avgProgressEl.textContent = avgProg + '%';
+
+                const avgGrade = getAverageGrade();
+                if (avgGrade === null) {
+                    avgGradeEl.textContent = '—';
+                    overallGradeBadge.textContent = '📊 —';
+                } else {
+                    avgGradeEl.textContent = avgGrade.toFixed(1) + '%';
+                    overallGradeBadge.textContent = `📊 ${avgGrade.toFixed(1)}% avg`;
+                }
+
+                itemCountEl.textContent = getTotalItems();
+            }
+
+            // ---------- Course modal ----------
+            function openAddCourseModal() {
+                courseModalTitle.textContent = 'Add course';
+                courseEditIndex.value = '-1';
+                courseForm.reset();
+                courseModalOverlay.classList.add('active');
+                courseNameInput.focus();
+            }
+
+            function openEditCourseModal(index) {
+                const course = courses[index];
+                if (!course) return;
+                courseModalTitle.textContent = 'Edit course';
+                courseEditIndex.value = index;
+                courseNameInput.value = course.name || '';
+                courseCodeInput.value = course.code || '';
+                courseModalOverlay.classList.add('active');
+                courseNameInput.focus();
+            }
+
+            function closeCourseModal() {
+                courseModalOverlay.classList.remove('active');
+            }
+
+            courseForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = courseNameInput.value.trim();
+                if (!name) {
+                    alert('Course name is required.');
+                    return;
+                }
+                const code = courseCodeInput.value.trim();
+                const idx = parseInt(courseEditIndex.value, 10);
+
+                if (idx === -1) {
+                    // new course
+                    courses.push({ id: uid(), name, code, items: [] });
+                } else if (idx >= 0 && idx < courses.length) {
+                    courses[idx].name = name;
+                    courses[idx].code = code;
+                }
+
+                saveCourses();
+                renderCourses();
+                closeCourseModal();
+            });
+
+            cancelCourseModalBtn.addEventListener('click', closeCourseModal);
+            courseModalOverlay.addEventListener('click', (e) => {
+                if (e.target === courseModalOverlay) closeCourseModal();
+            });
+
+            // ---------- Item modal ----------
+            function openAddItemModal(courseIdx) {
+                const course = courses[courseIdx];
+                if (!course) return;
+                itemModalTitle.textContent = 'Add item';
+                itemEditIndex.value = '-1';
+                itemCourseIndex.value = courseIdx;
+                itemForm.reset();
+                itemTypeInput.value = 'quiz';
+                itemWeightInput.value = '10';
+                itemScoreInput.value = '0';
+                itemMaxScoreInput.value = '100';
+                itemModalOverlay.classList.add('active');
+                itemNameInput.focus();
+            }
+
+            function openEditItemModal(courseIdx, itemIdx) {
+                const course = courses[courseIdx];
+                if (!course || !course.items || !course.items[itemIdx]) return;
+                const item = course.items[itemIdx];
+
+                itemModalTitle.textContent = 'Edit item';
+                itemEditIndex.value = itemIdx;
+                itemCourseIndex.value = courseIdx;
+                itemNameInput.value = item.name || '';
+                itemTypeInput.value = item.type || 'quiz';
+                itemWeightInput.value = item.weight ?? 10;
+                itemScoreInput.value = item.score ?? 0;
+                itemMaxScoreInput.value = item.maxScore ?? 100;
+                itemModalOverlay.classList.add('active');
+                itemNameInput.focus();
+            }
+
+            function closeItemModal() {
+                itemModalOverlay.classList.remove('active');
+            }
+
+            itemForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const courseIdx = parseInt(itemCourseIndex.value, 10);
+                if (courseIdx < 0 || courseIdx >= courses.length) {
+                    alert('Invalid course.');
+                    return;
+                }
+                const course = courses[courseIdx];
+
+                const name = itemNameInput.value.trim();
+                if (!name) {
+                    alert('Item name is required.');
+                    return;
+                }
+
+                const type = itemTypeInput.value;
+                let weight = parseFloat(itemWeightInput.value);
+                if (isNaN(weight) || weight < 0) weight = 0;
+
+                let score = parseFloat(itemScoreInput.value);
+                if (isNaN(score) || score < 0) score = 0;
+
+                let maxScore = parseFloat(itemMaxScoreInput.value);
+                if (isNaN(maxScore) || maxScore <= 0) maxScore = 100;
+
+                const idx = parseInt(itemEditIndex.value, 10);
+
+                if (idx === -1) {
+                    // add
+                    if (!course.items) course.items = [];
+                    course.items.push({ id: uid(), name, type, weight, score, maxScore });
+                } else if (idx >= 0 && course.items && idx < course.items.length) {
+                    // edit
+                    course.items[idx] = {
+                        ...course.items[idx],
+                        name, type, weight, score, maxScore
+                    };
+                }
+
+                saveCourses();
+                renderCourses();
+                closeItemModal();
+            });
+
+            cancelItemModalBtn.addEventListener('click', closeItemModal);
+            itemModalOverlay.addEventListener('click', (e) => {
+                if (e.target === itemModalOverlay) closeItemModal();
+            });
+
+            // ---------- delete ----------
+            function deleteCourse(index) {
+                if (index < 0 || index >= courses.length) return;
+                const course = courses[index];
+                if (confirm(`Delete "${course.name}" and all its items? This cannot be undone.`)) {
+                    courses.splice(index, 1);
+                    saveCourses();
+                    renderCourses();
+                }
+            }
+
+            function deleteItem(courseIdx, itemIdx) {
+                const course = courses[courseIdx];
+                if (!course || !course.items || itemIdx < 0 || itemIdx >= course.items.length) return;
+                const item = course.items[itemIdx];
+                if (confirm(`Delete "${item.name}"?`)) {
+                    course.items.splice(itemIdx, 1);
+                    saveCourses();
+                    renderCourses();
+                }
+            }
+
+            // ---------- reset ----------
+            function resetAllData() {
+                if (confirm('Reset all courses to default? This will erase your custom data.')) {
+                    courses = defaultCourses.map(c => ({
+                        id: uid(),
+                        name: c.name,
+                        code: c.code,
+                        items: c.items.map(i => ({ ...i, id: uid() }))
+                    }));
+                    saveCourses();
+                    renderCourses();
+                }
+            }
+
+            // ---------- global listeners ----------
+            addCourseBtn.addEventListener('click', openAddCourseModal);
+            resetDataBtn.addEventListener('click', resetAllData);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (courseModalOverlay.classList.contains('active')) closeCourseModal();
+                    if (itemModalOverlay.classList.contains('active')) closeItemModal();
+                }
+            });
+
+            // storage sync across tabs
+            window.addEventListener('storage', (e) => {
+                if (e.key === STORAGE_KEY) {
+                    loadCourses();
+                    renderCourses();
+                }
+            });
+
+            // ---------- init ----------
+            loadCourses();
+            renderCourses();
+
+        })();
+    </script>
+</body>
+
+</html>
